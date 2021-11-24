@@ -15,6 +15,10 @@ class CreateCursosInscritosTable extends Migration
     {
         Schema::create('cursos_inscritos', function (Blueprint $table) {
             $table->id();
+            $table->unsignedBigInteger('usuario_id');
+            $table->foreign('usuario_id')->references('id')->on('usuarios');
+            $table->unsignedBigInteger('curso_id');
+            $table->foreign('curso_id')->references('id')->on('cursos');
             $table->timestamps();
         });
     }
