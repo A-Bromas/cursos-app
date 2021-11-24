@@ -54,7 +54,8 @@ class UsuariosController extends Controller
         if($usuario && $usuario->activado == 1){
             try{
                 $usuario->activado = 0;
-                $respuesta['msg'] = "Usuario desactivada ";
+                $usuario->save();
+                $respuesta['msg'] = "Usuario desactivado";
             }catch(\Exception $e){
                 $respuesta['status'] = 0;
                 $respuesta['msg'] = "Se ha producido un error: ".$e->getMessage();
@@ -62,7 +63,7 @@ class UsuariosController extends Controller
                 
             }
 
-        }else if($usuario->activado == 0){
+        }else if(!$usuario->activado == 1){
             $respuesta["msg"] = "Usuario ya esta desactivado";
             $respuesta["Status"] = 0;
         }else{
@@ -87,29 +88,49 @@ class UsuariosController extends Controller
 
         $usuario = Usuario::find($id);
 
-        if(isset($datos->nombre))
-            $usuario->nombre = $datos->nombre;
+        if ($usuario->activado == 1){
+            if(isset($datos->nombre))
+                $usuario->nombre = $datos->nombre;
 
-        if(isset($datos->foto))
-            $usuario->foto = $datos->foto;
+            if(isset($datos->foto))
+                $usuario->foto = $datos->foto;
 
-        if(isset($datos->contraseña))
-            $usuario->contraseña = $datos->contraseña;
+            if(isset($datos->contraseña))
+                $usuario->contraseña = $datos->contraseña;
 
         //Escribir en la base de datos
-        try{
-            $usuario->save();
-            $respuesta['msg'] = "Usuario actualizada ";
-        }catch(\Exception $e){
+            try{
+                $usuario->save();
+                $respuesta['msg'] = "Usuario actualizada ";
+            }catch(\Exception $e){
+                $respuesta['status'] = 0;
+                $respuesta['msg'] = "Se ha producido un error: ".$e->getMessage();
+            }
+        }else {
             $respuesta['status'] = 0;
-            $respuesta['msg'] = "Se ha producido un error: ".$e->getMessage();
-            
+            $respuesta['msg'] = "El usuario esta desactivado";
         }
+
+       
 
        return response()->json($respuesta);
     
         
 
+    }public function ver($id){
+
+        $respuesta = ["status" => 1,"msg"=> "" ];
+        try{
+            $usuario = Usuario::find($id);
+            $respuesta['datos'] = $usuario;
+        }catch(\Exception $e){
+            $respuesta['status'] = 0;
+            $respuesta['msg'] = "Se ha producido un error: ".$e->getMessage();
+    
+            
+        }
+    
+       return response()->json($respuesta);
+    
     }
-   
 }
