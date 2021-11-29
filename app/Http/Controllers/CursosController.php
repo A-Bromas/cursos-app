@@ -113,22 +113,33 @@ class CursosController extends Controller
         
 
     }
-    */public function listar(){
+    */
 
+    public function listar(Request $busqueda){
 
-        $respuesta = ["status" => 1,"msg"=> "" ];
+        $respuesta = ["status" => 1, "msg" => ""];
         try{
-            $cursos = Curso::all();
-            $respuesta['datos'] = $cursos;
 
+            if($busqueda -> has('busqueda')){
+
+               $cursos = Curso::select(['id','titulo','portada'])                        
+                        ->withCount('videos as cantidad_videos')    
+                        ->where('titulo','like','%'. $busqueda -> input('busqueda').'%')
+                        ->get();
+
+            }else{
+                $cursos = Curso::select(['id','titulo','portada'])                        
+                        ->withCount('videos as cantidad_videos')    
+                        ->get();
+               
+            }
+            
+            $respuesta['datos'] = $cursos;
         }catch(\Exception $e){
             $respuesta['status'] = 0;
             $respuesta['msg'] = "Se ha producido un error: ".$e->getMessage();
-            
         }
-
-        
-        return response() ->json($respuesta);
+        return response()->json($respuesta);
     }
     
     public function ver($id){

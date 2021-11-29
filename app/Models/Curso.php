@@ -8,4 +8,14 @@ use Illuminate\Database\Eloquent\Model;
 class Curso extends Model
 {
     use HasFactory;
+
+    public function videos(){
+
+        return $this -> hasMany(Video::class,'curso_id');
+
+    }
+    public function usuarios()
+    {
+        return $this->belongsToMany(Usuario::class,'cursos_inscritos');
+    }
 }
