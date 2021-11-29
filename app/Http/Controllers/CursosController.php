@@ -122,13 +122,13 @@ class CursosController extends Controller
 
             if($busqueda -> has('busqueda')){
 
-               $cursos = Curso::select(['id','titulo','portada'])                        
+               $cursos = Curso::select(['titulo','portada'])                        
                         ->withCount('videos as videos_curso')    
                         ->where('titulo','like','%'. $busqueda -> input('busqueda').'%')
                         ->get();
 
             }else{
-                $cursos = Curso::select(['id','titulo','portada'])                        
+                $cursos = Curso::select(['titulo','portada'])                        
                         ->withCount('videos as videos_curso')    
                         ->get();
                
