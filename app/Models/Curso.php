@@ -8,6 +8,7 @@ use Illuminate\Database\Eloquent\Model;
 class Curso extends Model
 {
     use HasFactory;
+    protected $hidden = ['pivot','descripcion','created_at','updated_at'];
 
     public function videos(){
 

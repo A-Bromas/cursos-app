@@ -4,6 +4,8 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Models\Usuario;
+use App\Models\Curso;
+
 
 class UsuariosController extends Controller
 {
@@ -133,4 +135,40 @@ class UsuariosController extends Controller
        return response()->json($respuesta);
     
     }
+    public function comprar_curso($curso_id,$usuario_id){
+        $respuesta = ["status" => 1, "msg" => ""];
+
+        $usuario = Usuario::find($usuario_id);
+        $curso = Curso::find($curso_id);
+       
+
+        if($usuario && $curso){
+            $usuario->cursos()->attach($curso);
+            $respuesta['msg'] = "El usuario ".$usuario->nombre. " ha comprado el curso ".$curso->titulo;
+        }else{
+            $respuesta['status'] = 0;
+            $respuesta['msg'] = "Usuario o Curso no encontrado: ";
+        }
+        return response()->json($respuesta);
+
+    }
+
+    public function adquiridos($usuario_id){
+
+        $respuesta = ["status" => 1, "msg" => ""];
+
+        $usuario = Usuario::find($usuario_id);
+        
+
+        if($usuario){
+            $comprados = $usuario->cursos;
+            $respuesta['Cursos'] = $comprados;
+        }else{
+            $respuesta['status'] = 0;
+            $respuesta['msg'] = "Usuario no encontrado: ";
+        }
+        return response()->json($respuesta);
+
+    }
+
 }
