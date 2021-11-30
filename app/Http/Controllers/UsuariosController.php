@@ -141,13 +141,20 @@ class UsuariosController extends Controller
         $usuario = Usuario::find($usuario_id);
         $curso = Curso::find($curso_id);
        
-
-        if($usuario && $curso){
-            $usuario->cursos()->attach($curso);
-            $respuesta['msg'] = "El usuario ".$usuario->nombre. " ha comprado el curso ".$curso->titulo;
+        if($usuario && $usuario->activado == 1){
+            if($curso){
+                $usuario->cursos()->attach($curso);
+                $respuesta['msg'] = "El usuario ".$usuario->nombre. " ha comprado el curso ".$curso->titulo;
+            }else{
+                $respuesta['status'] = 0;
+                $respuesta['msg'] = "Curso no encontrado: ";
+            }
+        }else if(!$usuario->activado == 1){
+            $respuesta["msg"] = "Usuario esta desactivado";
+            $respuesta["Status"] = 0;
         }else{
-            $respuesta['status'] = 0;
-            $respuesta['msg'] = "Usuario o Curso no encontrado: ";
+            $respuesta["msg"] = "Persona no encontrada";
+            $respuesta["Status"] = 0;
         }
         return response()->json($respuesta);
 
