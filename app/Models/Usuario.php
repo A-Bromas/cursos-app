@@ -7,7 +7,7 @@ use Illuminate\Database\Eloquent\Model;
 
 class Usuario extends Model
 {
-    protected $hidden = ['descripcion','created_at','updated_at'];
+    protected $hidden = ['created_at','updated_at'];
 
     use HasFactory;
     public function cursos()
