@@ -27,8 +27,6 @@ class UsuariosController extends Controller
         $usuario->contraseña = $datos->contraseña;
         $usuario->activado = $datos->activado = 1;
 
-        if(isset($datos->email))
-            $usuario->email = $datos->email;
 
         //Escribir en la base de datos
         try{
@@ -103,7 +101,7 @@ class UsuariosController extends Controller
         //Escribir en la base de datos
             try{
                 $usuario->save();
-                $respuesta['msg'] = "Usuario actualizada ";
+                $respuesta['msg'] = "Usuario actualizado con id ".$usuario->id;
             }catch(\Exception $e){
                 $respuesta['status'] = 0;
                 $respuesta['msg'] = "Se ha producido un error: ".$e->getMessage();
